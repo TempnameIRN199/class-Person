@@ -69,15 +69,21 @@ public:
 		return email;
 	}
 	void diskOut() {
-		ofstream fout(PERSFILE, ios::binary | ios::app);
+		ofstream fout("PERSFILE.dat", ios::binary | ios::app);
 		fout.write((char*)this, sizeof(*this));
 		fout.close();
 	}
 	void diskIn(int n) {
-		ifstream fin(PERSFILE, ios::binary);
+		ifstream fin("PERSFILE.dat", ios::binary);
 		fin.seekg(n * sizeof(*this));
 		fin.read((char*)this, sizeof(*this));
 		fin.close();
 	}
-	static int diskCount();
+	static int diskCount() {
+		ifstream fin("PERSFILE.dat", ios::binary);
+		fin.seekg(0, ios::end);
+		int n = fin.tellg() / sizeof(Person);
+		fin.close();
+		return n;
+	}
 };
